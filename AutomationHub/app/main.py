@@ -1,27 +1,52 @@
 from fastapi import FastAPI, HTTPException
+from contextlib import asynccontextmanager
 from pathlib import Path
 import httpx
 from json import JSONDecodeError
+import asyncio
 import logging
 logger = logging.getLogger(__name__)
 try:
-    from AutomationHub.app.config.load_env import weather_KEY, timeout
+    from AutomationHub.app.config.load_env import weather_KEY, timeout, data_file_path, cache_path
 except ValueError as e:
     logger.error(f'Error with geting API keys. {e}')
     raise SystemExit(1)
 from AutomationHub.app.services.weather_service import get_weather
 from AutomationHub.app.models.weather_model import WeatherModel, HistoryModel, AddWeather, AddResponse
 from AutomationHub.app.models.save_json_model import read_json, add_to_json
-hand_mades = Path(__file__).parent / 'data' / 'hand_mades.json'
-if not hand_mades.exists:
+from AutomationHub.app.services.cleanup_service import cleanup_cache
+hand_mades = Path(__file__).parent / data_file_path
+cache = Path(__file__).parent / cache_path
+if not hand_mades.exists():
     hand_mades.touch()
-app = FastAPI()
+if not cache.exists():
+    cache.touch()
 
-print('Backend starting...')
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        print('Backend starting...')
+        cln_cache = asyncio.create_task(cleanup_cache(cache))
+
+        yield
+
+        cln_cache.cancel()
+    except FileNotFoundError as e:
+        logger.error(f'Unexpected error with json file: {e}')
+        raise HTTPException(
+            status_code=500,
+            detail='Unexpected error with json file'
+        )
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+
 @app.get('/weather', response_model=WeatherModel)
 async def put_out_weather(city: str) -> WeatherModel:
     try:
-        result = await get_weather(weather_KEY, city, timeout)
+        result = await get_weather(weather_KEY, city, timeout, cache)
         model = WeatherModel(**result)
 
     except httpx.TimeoutException:
@@ -81,6 +106,12 @@ async def put_out_weather(city: str) -> WeatherModel:
             status_code=500,
             detail='Unexpected requests error'
         )
+    except FileNotFoundError as e:
+        logger.error(f'Unexpected error with json file: {e}')
+        raise HTTPException(
+            status_code=500,
+            detail='Unexpected error with json file'
+        )
     except Exception as e:
         logger.error(f'Unexpected error: {e}')
         raise HTTPException(
@@ -105,12 +136,18 @@ async def put_out_weather(data: AddWeather) -> AddResponse:
 @app.get('/weather/handMadeHistory', response_model=HistoryModel)
 def get_id() -> HistoryModel:
     try:
-        history = read_json(hand_mades)
+        history = read_json(hand_mades, 'list')
     except JSONDecodeError as e:
         logger.error(f'Unexpected error with opening json: {e}')
         raise HTTPException(
             status_code=500,
             detail='Unexpected error'
+        )
+    except FileNotFoundError as e:
+        logger.error(f'Unexpected error with json file: {e}')
+        raise HTTPException(
+            status_code=500,
+            detail='Unexpected error with json file'
         )
     except Exception as e:
         logger.error(f'Unexpected error: {e}')
