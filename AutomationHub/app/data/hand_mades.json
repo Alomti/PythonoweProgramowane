@@ -1,0 +1,12 @@
+[
+    {
+        "city": "London",
+        "temp": -69.0,
+        "wind_Speed": 2137.0
+    },
+    {
+        "city": "Wygwizdowo",
+        "temp": 80085.0,
+        "wind_Speed": 0.001
+    }
+]

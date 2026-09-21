@@ -91,7 +91,7 @@ async def put_out_weather(city: str) -> WeatherModel:
             logger.error(f'Unexcepted error {e}')
             raise HTTPException(
                 status_code=500,
-                detail='Unexcepted requuests error'
+                detail='Unexpected requuests error'
             )
             
     except httpx.ConnectError as e:
@@ -121,10 +121,34 @@ async def put_out_weather(city: str) -> WeatherModel:
     return model
 
 @app.post('/weather/addWeather', response_model=AddResponse, status_code=201)
-async def put_out_weather(data: AddWeather) -> AddResponse:
+async def insert_weather(data: AddWeather) -> AddResponse:
     try:
-        add_to_json(hand_mades, data)
+        add_to_json(hand_mades, data.model_dump(), 'list')
         message = 'Thanks for updating weather in your location'
+    except JSONDecodeError as e:
+        logger.error(f'Unexpected error with opening json: {e}')
+        raise HTTPException(
+            status_code=500,
+            detail='Unexpected error with json file'
+        )
+    except FileNotFoundError as e:
+        logger.error(f"Plik bazy danych nie istnieje: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Database file missing"
+        )
+    except PermissionError as e:
+        logger.error(f"Brak uprawnień do zapisu do pliku: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Database write permission denied"
+        )
+    except (KeyError, IndexError) as e:
+        logger.error(f"Błąd struktury danych w pliku JSON: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Data structure corruption"
+        )
     except Exception as e:
         logger.error(f'Unexpected error: {e}')
         raise HTTPException(
@@ -141,7 +165,7 @@ def get_id() -> HistoryModel:
         logger.error(f'Unexpected error with opening json: {e}')
         raise HTTPException(
             status_code=500,
-            detail='Unexpected error'
+            detail='Unexpected error with json file'
         )
     except FileNotFoundError as e:
         logger.error(f'Unexpected error with json file: {e}')
