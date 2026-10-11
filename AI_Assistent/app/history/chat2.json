@@ -1,0 +1,37 @@
+[
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"Konieczność natychmiastowego wycofania się z umowy zakupu roweru oraz dokonania zwrotu dostarczonej już prasy hydraulicznej z przyczyn o charakterze wyższej konieczności losowej oraz głębokiej tragedii rodzinnej (śmierć rodzeństwa, nagła i ciężka choroba matki skutkująca hospitalizacją). Klient znajduje się w krytycznym stanie emocjonalnym oraz ekstremalnej sytuacji finansowej wywołanej kosztami leczenia i pochówku, co redefiniuje jego potrzeby zakupowe jako całkowicie zbędne. Klient apeluje o bezwarunkowe, humanitarne odstąpienie od standardowych procedur reklamacyjnych, oczekując pełnej empatii, darmowej logistyki zwrotnej oraz błyskawicznego zwrotu gotówki.\"}",
+        "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "Powtarzam pytanie, bo chyba nikt tam tego nie czyta! Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już przyszło z prasą hydrauliczną. Bo mi brat umarł i mama zachorowała. Dlaczego muszę pisać to samo po raz kolejny? Czy wy w ogóle zatrudniacie tam żywych ludzi, czy odpowiada mi jakiś bezduszny bot, który nie potrafi przetworzyć prostej informacji o tragedii życiowej? Sytuacja jest krytyczna, siedzę w szpitalu przy łóżku matki, telefon mi się rozładowuje, a wy zmuszacie mnie do ponownego opisywania mojego dramatu. Rower miał być prezentem, ale teraz nie ma już komu go dać. Prasa hydrauliczna zajmuje pół przedpokoju i tylko przypomina mi o planach, które legły w gruzach. Żądam, aby menedżer wyższego szczebla spojrzał na tę sprawę i anulował to wszystko ręcznie w systemie. Jeśli dostanę kolejną automatyczną odpowiedź bez konkretnych instrukcji jak odesłać kurierem tę prasę na wasz koszt, to po prostu zostawię to wszystko i zajmę się rodziną, a koszty będę odzyskiwał przez bankowy chargeback. Proszę o odrobinę współczucia i profesjonalizmu.",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"Wielokrotne i powtórne żądanie anulacji oraz zwrotu asortymentu (rower, prasa hydrauliczna) wywołane brakiem satysfakcjonującej i natychmiastowej reakcji ze strony systemów obsługi klienta na zgłoszoną wcześniej tragedię życiową (zgon brata, krytyczny stan zdrowia matki). Klient wykazuje krańcowe wyczerpanie psychiczne, potęgowane przez przebywanie w placówce medycznej oraz poczucie bezduszności algorytmów operacyjnych firmy. Formułuje kategoryczne ultimatum dotyczące zaangażowania czynnika ludzkiego (managera), sfinansowania przez sprzedawcę logistyki zwrotu gabarytowego oraz grozi uruchomieniem procedury chargeback w instytucji bankowej w przypadku dalszej opieszałości.\"}",
+        "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała.",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"Śmierć brata i choroba matki\"}",
+        "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "Chcę zwrócić anulować zamówienie karty podarunkowej bo je anulowałem przez to że się pokłuciłem z bratankiem o kolor najleprzego napoju i chciałem sprawdzić jego stan to nie pokazywało nic..",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"karta podarunkowa\",\"reason\":\"Kłótnia z bratankiem o kolor najlepszego napoju\"}",
+        "file_data": null
+    }
+]

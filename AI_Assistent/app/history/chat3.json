@@ -1,0 +1,26 @@
+[
+    {
+        "role": "user",
+        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
+    },
+    {
+        "role": "model",
+        "text": "Here is the JSON requested:\n```"
+    },
+    {
+        "role": "user",
+        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
+    },
+    {
+        "role": "model",
+        "text": "Here is the JSON requested:\n```"
+    },
+    {
+        "role": "user",
+        "text": "Chcę zwrócić anulować zamówienie karty podarunkowej bo je anulowałem przez to że się pokłuciłem z bratankiem o kolor najleprzego napoju i chciałem sprawdzić jego stan to nie pokazywało nic.."
+    },
+    {
+        "role": "model",
+        "text": "Here is the JSON requested:\n"
+    }
+]

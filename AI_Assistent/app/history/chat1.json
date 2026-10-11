@@ -1,0 +1,42 @@
+[
+    {
+        "role": "user",
+        "text": "Gdzie moje zamówienie"
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"check_status\",\"product\":null,\"reason\":null}"
+    },
+    {
+        "role": "user",
+        "text": "To z butami"
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"check_status\",\"product\":\"buty\",\"reason\":null}"
+    },
+    {
+        "role": "user",
+        "text": "Bo mi się nudzi czekanie"
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"check_status\",\"product\":\"buty\",\"reason\":\"nudzi mi się czekanie\"}"
+    },
+    {
+        "role": "user",
+        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"brat umarł i mama zachorowała\"}"
+    },
+    {
+        "role": "user",
+        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"brat umarł i mama zachorowała\"}"
+    }
+]
