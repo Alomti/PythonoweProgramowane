@@ -18,17 +18,44 @@ historydir = Path(__file__).parents[1] / 'history'
 class AiChat():
     def __init__(self, ai_model, response_model, instructions, chatname):
         self.model = ai_model
-        self.chatdir = historydir / (chatname + '.json')
+        self.chatfile = historydir / (chatname + '.json')
         try:
-            self.history = load_history_from_json(self.chatdir)
+            self.history = load_history_from_json(self.chatfile)
+            # próba naprawy pliku historii gdy coś nie tak
         except json.JSONDecodeError as e:
             print(f'Error {e}. With loading chat history.')
-            filelines = Path(historydir / (chatname + '.json'))
+            filetext = Path(historydir / (chatname + '.json')).read_text(encoding='utf-8')
+            filelines = filetext.splitlines()
             error_line = e.lineno
             start = max(0, error_line - 3)
             end = min(len(filelines), error_line + 2)
             for i in range(start, end):
                 print(f'{i + 1}: {filelines[i]}')
+            recovered_history = []
+            index = 0
+            while True:
+                try:
+                    if index >= len(filetext):
+                        break
+                    while filetext[index].isspace():
+                        index += 1
+                    match filetext[index]:
+                        case '[':
+                            index += 1
+                            continue
+                        case ',':
+                            index += 1
+                            continue
+                        case ']':
+                            break
+                    part, index = json.JSONDecoder().raw_decode(filetext, index)
+                    recovered_history.append(part)
+                except json.JSONDecodeError:
+                    break
+            Path(historydir / f'{chatname}_corrupted.json').write_text(data=filetext, encoding='utf-8')
+            save_json(self.chatfile, recovered_history)
+            self.history = load_history_from_json(self.chatfile)
+        # historia zserializowana do obiektów czystego pythona żeby json potrafił na niej robić operacje
         self.history_serialized = []
         if self.history != []:
             for i in self.history:
@@ -81,7 +108,7 @@ class AiChat():
             message['file_data'] = filedata
             history.append(message)
         self.history_serialized = history
-        save_json(self.chatdir, self.history_serialized)
+        save_json(self.chatfile, self.history_serialized)
 
     def summary_history(self):
         summary_config = genai.types.GenerateContentConfig(
@@ -101,6 +128,7 @@ class AiChat():
     def new_message(self, content, file):
         summary_used = False
         if self.history != []:
+            # podsumowanie historii przy odpowiedniej ilości tokenów w historii
             if self.client.models.count_tokens(model=self.model, contents=self.history).total_tokens > 4000:
                 long_story_short = self.summary_history()
                 historybutt = self.history
@@ -177,4 +205,4 @@ Tokeny na myślenie: {result.usage_metadata.thoughts_token_count}
         return result.parsed
     
 aichat = AiChat(AI_MODEL, AIResponse, 'You are client helper chatbot and your task is to tell whether client want to return product, cancel order or check order state. Tell what product client refers to or this field can be null if client does not specified product and the same way fulfill reason', 'chat2')
-print(aichat.new_message('Chcę zwrócić anulować zamówienie karty podarunkowej bo je anulowałem przez to że się pokłuciłem z bratankiem o kolor najleprzego napoju i chciałem sprawdzić jego stan to nie pokazywało nic..', Path(historydir / 'chat1.json')))
+print(aichat.new_message('Czemu nie mogę sprawdzić stanu mojego zamówienia które bym chciał usunąć? Bo przyszło uszkodzone wieć domagam się zwrotu.', Path(historydir / 'chat1.json')))
