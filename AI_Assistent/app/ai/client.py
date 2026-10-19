@@ -15,6 +15,7 @@ import httpx
 import time
 
 historydir = Path(__file__).parents[1] / 'history'
+corrupted = Path(historydir / 'corrupted')
 class AiChat():
     def __init__(self, ai_model, response_model, instructions, chatname):
         self.model = ai_model
@@ -23,38 +24,58 @@ class AiChat():
             self.history = load_history_from_json(self.chatfile)
             # próba naprawy pliku historii gdy coś nie tak
         except json.JSONDecodeError as e:
-            print(f'Error {e}. With loading chat history.')
-            filetext = Path(historydir / (chatname + '.json')).read_text(encoding='utf-8')
-            filelines = filetext.splitlines()
-            error_line = e.lineno
-            start = max(0, error_line - 3)
-            end = min(len(filelines), error_line + 2)
-            for i in range(start, end):
-                print(f'{i + 1}: {filelines[i]}')
-            recovered_history = []
-            index = 0
-            while True:
-                try:
-                    if index >= len(filetext):
-                        break
-                    while filetext[index].isspace():
-                        index += 1
-                    match filetext[index]:
-                        case '[':
-                            index += 1
-                            continue
-                        case ',':
-                            index += 1
-                            continue
-                        case ']':
+            try:
+                print(f'Error {e}. With loading chat history.')
+                Path(historydir / f'{chatname}.json').replace(Path(corrupted / f'{chatname}.json'))
+                filetext = Path(corrupted / (chatname + '.json')).read_text(encoding='utf-8')
+                filelines = filetext.splitlines()
+                error_line = e.lineno
+                start = max(0, error_line - 3)
+                end = min(len(filelines), error_line + 2)
+                for i in range(start, end):
+                    print(f'{i + 1}: {filelines[i]}')
+                recovered_history = []
+                index = 0
+                while True:
+                    try:
+                        if index >= len(filetext):
                             break
-                    part, index = json.JSONDecoder().raw_decode(filetext, index)
-                    recovered_history.append(part)
-                except json.JSONDecodeError:
-                    break
-            Path(historydir / f'{chatname}_corrupted.json').write_text(data=filetext, encoding='utf-8')
-            save_json(self.chatfile, recovered_history)
-            self.history = load_history_from_json(self.chatfile)
+                        while filetext[index].isspace():
+                            index += 1
+                        if index >= len(filetext):
+                            break
+                        match filetext[index]:
+                            case '[':
+                                index += 1
+                                continue
+                            case ',':
+                                index += 1
+                                continue
+                            case ']':
+                                break
+                        if index >= len(filetext):
+                            break
+                        part, index = json.JSONDecoder().raw_decode(filetext, index)
+                        recovered_history.append(part)
+                    except json.JSONDecodeError:
+                        break 
+                save_json(self.chatfile, recovered_history)
+                self.history = load_history_from_json(self.chatfile)
+            except UnicodeDecodeError as e:
+                print(f'Error {e} with attempt of recover chat data.')
+                self.history = []
+        except (FileNotFoundError, PermissionError) as e:
+            Path(historydir / f'{chatname}.json').replace(Path(corrupted / f'{chatname}.json'))
+            print(f'Error {e} when trying to load chat.')
+            self.history = []
+        except OSError as e:
+            Path(historydir / f'{chatname}.json').replace(Path(corrupted / f'{chatname}.json'))
+            print(f'Error {e} when trying to load chat.')
+            self.history = []
+        except Exception as e:
+            Path(historydir / f'{chatname}.json').replace(Path(corrupted / f'{chatname}.json'))
+            print(f'Unexpected error: {e} with loading history.')
+            self.history = []
         # historia zserializowana do obiektów czystego pythona żeby json potrafił na niej robić operacje
         self.history_serialized = []
         if self.history != []:
