@@ -46,15 +46,22 @@
     },
     {
         "role": "user",
-        "text": "Czemu nie mogę sprawdzić stanu mojego zamówienia które bym chciał usunąć? Bo przyszło uszkodzone wieć domagam się zwrotu.",
-        "file_data": {
-            "file_name": null,
-            "file_type": "application/json"
-        }
+        "text": "Użyto pliku None (application/json)",
+        "file_data": null
     },
     {
         "role": "model",
         "text": "{\"intent\":\"return\",\"product\":null,\"reason\":\"przyszło uszkodzone\"}",
+        "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":\"return\",\"product\":null,\"reason\":\"przyszło uszkodzone\",\"document\":\"Klient może zwrócić zakupiony produkt w ciągu 30 dni od otrzymania przesyłki. Produkt powinien być odpowiednio zabezpieczony na czas transportu. Aby rozpocząć zwrot, należy wypełnić formularz zwrotu dostępny na stronie sklepu.\"} ",
         "file_data": null
     }
 ]
