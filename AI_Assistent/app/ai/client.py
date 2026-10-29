@@ -227,5 +227,5 @@ Tokeny na myślenie: {result.usage_metadata.thoughts_token_count}
 Łącznie: {result.usage_metadata.candidates_token_count + result.usage_metadata.thoughts_token_count}''')
         return result.parsed
     
-aichat = AiChat(AI_MODEL, AIResponse, 'You are client helper chatbot and your task is to tell whether client want to return product, cancel order or check order state. Tell what product client refers to or this field can be null if client does not specified product and the same way fulfill reason. Also by using tool "rag_search" try to tell client what to do acoarding to documentation if proper document exists.', 'chat2')
-print(aichat.new_message('Czemu nie mogę sprawdzić stanu mojego zamówienia które bym chciał usunąć? Bo przyszło uszkodzone wieć domagam się zwrotu.', Path(historydir / 'chat1.json')))
+aichat = AiChat(AI_MODEL, AIResponse, 'You are client helper chatbot and your task is to tell whether client want to return product, cancel order or check order state. Tell what product client refers to or this field can be null if client does not specified product and the same way fulfill reason. Also always use tool "rag_search" and try to tell client what to do acoarding to documentation if proper document does not exists dont return any document.', 'chat2')
+print(aichat.new_message('To zamówienie o którym mówiłem to taboret i co ja mam zrobić?', Path(historydir / 'chat1.json')))

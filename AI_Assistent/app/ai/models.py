@@ -11,4 +11,4 @@ class SummaryResponse(BaseModel):
     intent: Literal['return', 'cancel_order', 'check_status'] | None
     product: str | None
     reason: str | None
-    helpful_informations: str | None
+    helpful_informations: list[str] | None

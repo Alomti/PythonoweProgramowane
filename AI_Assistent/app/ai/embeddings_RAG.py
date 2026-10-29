@@ -2,8 +2,20 @@ import math
 from google import genai
 from google.genai import types
 from AI_Assistent.config.loadenv import API_KEY
+from google.genai.errors import APIError
+import httpx
+import time
 
-client = genai.Client(api_key=API_KEY)
+RETRYABLE_CODES = {408, 429, 500, 502, 503, 504}
+
+client = genai.Client(
+    api_key=API_KEY,
+    http_options=types.HttpOptions(
+        retry_options=types.HttpRetryOptions(
+            attempts=1
+        )
+    )
+    )
 
 def cosine_similarity(a, b):
     góra = sum(x * y for x, y in zip(a, b))
@@ -44,19 +56,82 @@ text: {d}''')
         ]
     ) for d in documents
 ]
+emb_docs = None
+for i in range(3):
+    try:
+        embed_docs = client.models.embed_content(
+            model='gemini-embedding-2',
+            contents=documents_parts
+        )
+        emb_docs = [(documents[i], emb.values) for i, emb in enumerate(embed_docs.embeddings)]
+        break
+    except APIError as e:
+        if i == 2:
+            break
+        elif e.code in RETRYABLE_CODES:
+            time.sleep(i + 1)
+            continue
+        else:
+            break
 
-embed_docs = client.models.embed_content(
-    model='gemini-embedding-2',
-    contents=documents_parts
-)
-emb_docs = [(documents[i], emb.values) for i, emb in enumerate(embed_docs.embeddings)]
+    except (httpx.TimeoutException, httpx.NetworkError):
+        if i == 2:
+            break
+        else:
+            time.sleep(i + 1)
+            continue
 
-def rag_search(query: str) -> list:
-    result = client.models.embed_content(
-        model='gemini-embedding-2',
-        contents=f'''task: question answering |
-        query: {query}'''
-    )
+
+def rag_search(query: str) -> dict:
+    """
+    This tool searches through the documentation. Should be used when message is about company's internal proceses like order state or delivery's state.
+    In any error case response will return success = False, no documents and error's details.
+    If everything goes well then response will return success + True, found documents and no errors.
+    """
+    if emb_docs is None:
+        return {
+            'success': False,
+            'documents': [],
+            'error': {
+                'type': 'Documents_unavailable',
+                'message': 'No connection to the database.'
+            }
+        }
+    result = None
+    for i in range(3):
+        try:
+            result = client.models.embed_content(
+                model='gemini-embedding-2',
+                contents=f'''task: question answering |
+                query: {query}'''
+            )
+            break
+        except APIError as e:
+            if i == 2:
+                break
+            elif e.code in RETRYABLE_CODES:
+                time.sleep(i + 1)
+                continue
+            else:
+                break
+        
+        except (httpx.TimeoutException, httpx.NetworkError):
+            if i == 2:
+                break
+            else:
+                time.sleep(i + 1)
+                continue
+
+
+    if result is None:
+        return {
+            'success': False,
+            'documents': [],
+            'error': {
+                'type': 'Embedding query error',
+                'message': 'Error with generating embedding vector for asked query.'
+            }
+        }
 
     accuracy = []
     for emb in emb_docs:
@@ -66,4 +141,8 @@ def rag_search(query: str) -> list:
     bests = []
     for i in accuracy[:2]:
         bests.append(i[0])
-    return bests
+    return {
+        'success': True,
+        'documents': bests,
+        'error': None
+    }
