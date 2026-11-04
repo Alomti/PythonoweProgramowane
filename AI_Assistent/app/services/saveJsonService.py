@@ -5,8 +5,8 @@ def read_json(file: Path):
     if not file.exists():
         file.touch()
     if file.stat().st_size == 0:
-        with open(file, 'w', encoding='utf-8'):
-            json.dump([])
+        with open(file, 'w', encoding='utf-8') as f:
+            json.dump([], f)
     with open(file, 'r', encoding='utf-8') as f:
         content = json.load(f)
         return content

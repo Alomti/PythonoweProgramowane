@@ -84,9 +84,13 @@ for i in range(3):
 
 def rag_search(query: str) -> dict:
     """
-    This tool searches through the documentation. Should be used when message is about company's internal proceses like order state or delivery's state.
-    In any error case response will return success = False, no documents and error's details.
-    If everything goes well then response will return success + True, found documents and no errors.
+    Searches the documentation using semantic similarity.
+
+    Use this tool for questions about company-specific processes,
+    such as order cancellation, returns, and delivery status.
+
+    Returns the two most similar documents when the search succeeds.
+    Returns success=False and error details if the search fails.
     """
     if emb_docs is None:
         return {

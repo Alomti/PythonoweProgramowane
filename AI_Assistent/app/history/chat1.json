@@ -1,42 +1,22 @@
 [
     {
         "role": "user",
-        "text": "Gdzie moje zamówienie"
+        "text": "Mam problem z moim ostatnim zamówieniem. Możecie mi pomóc?",
+        "file_data": null
     },
     {
         "role": "model",
-        "text": "{\"intent\":\"check_status\",\"product\":null,\"reason\":null}"
+        "text": "{\"intent\":null,\"product\":null,\"reason\":null,\"response_to_client\":\"Oczywiście, chętnie pomogę. Proszę opisać, na czym polega problem z zamówieniem, oraz podać jego numer.\",\"response_supported_by_documentation\":true}",
+        "file_data": null
     },
     {
         "role": "user",
-        "text": "To z butami"
+        "text": "Kupiłem u was buty, ale niestety są za małe. Co mogę zrobić?",
+        "file_data": null
     },
     {
         "role": "model",
-        "text": "{\"intent\":\"check_status\",\"product\":\"buty\",\"reason\":null}"
-    },
-    {
-        "role": "user",
-        "text": "Bo mi się nudzi czekanie"
-    },
-    {
-        "role": "model",
-        "text": "{\"intent\":\"check_status\",\"product\":\"buty\",\"reason\":\"nudzi mi się czekanie\"}"
-    },
-    {
-        "role": "user",
-        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
-    },
-    {
-        "role": "model",
-        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"brat umarł i mama zachorowała\"}"
-    },
-    {
-        "role": "user",
-        "text": "Jaki jest stan mojego zamówienia z rowerem? Bo chciałbym je anulować i zwrócić to co już pszyszło z prasą chydrauliczną. Bo mi brat umarł i mama zachorowała."
-    },
-    {
-        "role": "model",
-        "text": "{\"intent\":\"cancel_order\",\"product\":\"rower, prasa hydrauliczna\",\"reason\":\"brat umarł i mama zachorowała\"}"
+        "text": "{\"intent\":\"return\",\"product\":\"buty\",\"reason\":\"za małe\",\"response_to_client\":\"Możesz dokonać zwrotu zakupu w ciągu 30 dni od otrzymania przesyłki. Aby rozpocząć proces zwrotu, należy wypełnić formularz zwrotu dostępny na stronie sklepu. Pamiętaj o odpowiednim zabezpieczeniu butów na czas transportu.\",\"response_supported_by_documentation\":true} ",
+        "file_data": null
     }
 ]
