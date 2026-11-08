@@ -18,5 +18,25 @@
         "role": "model",
         "text": "{\"intent\":\"return\",\"product\":\"buty\",\"reason\":\"za małe\",\"response_to_client\":\"Możesz dokonać zwrotu zakupu w ciągu 30 dni od otrzymania przesyłki. Aby rozpocząć proces zwrotu, należy wypełnić formularz zwrotu dostępny na stronie sklepu. Pamiętaj o odpowiednim zabezpieczeniu butów na czas transportu.\",\"response_supported_by_documentation\":true} ",
         "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "Kupiłem u was telefon, ale chciałbym wymienić go na inny kolor. Czy mogę to zrobić?",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":null,\"product\":\"telefon\",\"reason\":\"inny kolor\",\"response_to_client\":\"Nie oferujemy bezpośredniej wymiany produktów. Możesz jednak zwrócić telefon w ciągu 30 dni od otrzymania przesyłki, wypełniając formularz zwrotu dostępny na stronie sklepu, a następnie złożyć nowe zamówienie na inny kolor.\",\"response_supported_by_documentation\":true} ",
+        "file_data": null
+    },
+    {
+        "role": "user",
+        "text": "Czy wasz sklep jest dzisiaj otwarty i do której godziny?",
+        "file_data": null
+    },
+    {
+        "role": "model",
+        "text": "{\"intent\":null,\"product\":null,\"reason\":null,\"response_to_client\":\"Niestety informacje dotyczące godzin otwarcia sklepu nie są dostępne w naszej oficjalnej dokumentacji, dlatego nie jestem w stanie ich potwierdzić.\",\"response_supported_by_documentation\":false} ",
+        "file_data": null
     }
 ]

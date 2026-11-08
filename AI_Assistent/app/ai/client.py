@@ -274,4 +274,4 @@ Return True only when all substantive company-specific information in response_t
 Under the assumption that the documentation is complete and authoritative, a conclusion that a company policy or procedure is not offered may be considered supported when the documentation provides sufficient information to establish this.
 Return False if the documentation was unavailable, no relevant documentation was found, or any substantive company-specific information relies on unverified information.
 The fact that rag_search was called successfully does not by itself mean that the response is supported by documentation.''', 'chat1')
-print(aichat.new_message('Kupiłem u was buty, ale niestety są za małe. Co mogę zrobić?', None))
+print(aichat.new_message('Czy wasz sklep jest dzisiaj otwarty i do której godziny?', None))
